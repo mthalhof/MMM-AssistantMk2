@@ -173,6 +173,7 @@ Module.register("MMM-AssistantMk2", {
     screenDuration: 0, //If you set 0, Screen Output will be closed after Response speech finishes.
 
     youtubeAutoplay: true,
+	spotifyAutoplay: true,
     pauseOnYoutube:true,
     youtubePlayerVars: { // You can set youtube playerVars for your purpose, but should be careful.
       "controls": 0,
@@ -230,7 +231,7 @@ Module.register("MMM-AssistantMk2", {
   },
 
   magicQueryToSay: {
-    "de" : "Repeat after me : '%TEXT%'", // I cannot find proper query for Deutsch
+    "de" : "Sprich mir nach : '%TEXT%'", // I cannot find proper query for Deutsch
     "en" : "Repeat after me : '%TEXT%'",
     "fr" : "Répétez après moi : '%TEXT%'",
     "it" : "Ripeti dopo di me : '%TEXT%'",
@@ -756,9 +757,15 @@ class AssistantHelper {
     this.foundError(payload.error)
     this.foundAction(payload.foundAction)
     this.foundHook(payload.foundHook)
+	console.error(payload);
+	
+	if (payload.foundOpenSpotify) {
+		this.sendNotification("PLAY_SPOTIFY", {
+			url: payload.foundOpenSpotify
+		})
+    };
 
-
-    if (payload.foundVideo || payload.foundVideoList) {
+    if (payload.foundVideo || payload.foundVideoList ) {
       if (this.config.youtubeAutoplay) {
         var after = ()=>{}
         if (this.config.pauseOnYoutube) {
@@ -777,6 +784,18 @@ class AssistantHelper {
           this.deactivate()
         }
       }
+	  if (this.config.spotifyAutoplay) {
+        var after = ()=>{}
+        if (this.config.pauseOnYoutube) {
+          after = ()=>{
+            this.clearResponse()
+            this.deactivate()
+          }
+        }
+        
+      }
+	  
+	  
     } else {
       var thenAfter
       if(payload.continueConversation) {

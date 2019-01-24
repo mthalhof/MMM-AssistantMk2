@@ -177,6 +177,7 @@ module.exports = NodeHelper.create({
       let foundAction = null
       let foundVideo = null
       let foundVideoList = null
+	  let foundOpenSpotify = null
       let foundTextResponse = ""
       let finalTranscription = ""
       let audioError = null
@@ -249,7 +250,7 @@ module.exports = NodeHelper.create({
         screenOutput = "temp.html"
         var str = screen.data.toString("utf8")
         str = str.replace("html,body{", "html,body{zoom:" + this.config.screenZoom + ";")
-
+		//console.error(str);
 
         /*
         // TODO:I'll put some code here for web scrapping for contents reading.
@@ -285,6 +286,14 @@ module.exports = NodeHelper.create({
           console.log("[AMK2] video list found:", youtubeList[1])
           foundVideoList = youtubeList[1]
         }
+		
+		var re = new RegExp("\\(.open\\.spotify\\.com – (https:\\/\\/open\\.spotify\\.com[^ ]*).\\)", "gm")
+        console.error("test");
+		var openSpotify = re.exec(str)
+        if (openSpotify) {
+          console.error("[AMK2] openSpotify found:", openSpotify[1])
+          foundOpenSpotify = openSpotify[1]
+        }
       })
 
       // once the conversation is ended, see if we need to follow up
@@ -294,6 +303,7 @@ module.exports = NodeHelper.create({
           foundHook = []
           foundVideo = null
           foundVideoList = null
+		  foundOpenSpotify = null
         } else {
           var tr = (textQuery) ? textQuery : finalTranscription
           foundHook = this.findHook(transcriptionHook, tr)
@@ -316,6 +326,7 @@ module.exports = NodeHelper.create({
             "foundAction": foundAction,
             "foundVideo": foundVideo,
             "foundVideoList": foundVideoList,
+			"foundOpenSpotify": foundOpenSpotify,
             "foundTextResponse" : foundTextResponse,
             "finalTranscription" : finalTranscription,
             "spoken": spoken,
