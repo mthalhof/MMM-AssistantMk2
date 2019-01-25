@@ -287,9 +287,9 @@ module.exports = NodeHelper.create({
           foundVideoList = youtubeList[1]
         }
 		
-		var re = new RegExp("\\(.open\\.spotify\\.com – (https:\\/\\/open\\.spotify\\.com[^ ]*).\\)", "gm")
-        console.error("test");
-		var openSpotify = re.exec(str)
+	var re = new RegExp("\\(.open\\.spotify\\.com – (https:\\/\\/open\\.spotify\\.com[^ ]*).\\)", "gm")
+	var openSpotify = re.exec(str)
+
         if (openSpotify) {
           console.error("[AMK2] openSpotify found:", openSpotify[1])
           foundOpenSpotify = openSpotify[1]
