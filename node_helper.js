@@ -286,7 +286,16 @@ module.exports = NodeHelper.create({
           console.log("[AMK2] video list found:", youtubeList[1])
           foundVideoList = youtubeList[1]
         }
-		
+
+	var re = new RegExp("https:\/\/open\.spotify\.com\/([a-zA-Z0-9?\/]+)", "gm")
+        //var re = new RegExp("\\(.open\\.spotify\\.com – (https:\\/\\/open\\.spotify\\.com[^ ]*).\\)", "gm")
+        var openSpotify = re.exec(str)
+        if (openSpotify) {
+        	console.error("[AMK2] openSpotify found:", openSpotify[0])
+          	foundOpenSpotify = openSpotify[0]
+	}
+	
+/*
 	var re = new RegExp("\\(.open\\.spotify\\.com – (https:\\/\\/open\\.spotify\\.com[^ ]*).\\)", "gm")
 	var openSpotify = re.exec(str)
 
@@ -294,7 +303,9 @@ module.exports = NodeHelper.create({
           console.error("[AMK2] openSpotify found:", openSpotify[1])
           foundOpenSpotify = openSpotify[1]
         }
+*/
       })
+
 
       // once the conversation is ended, see if we need to follow up
       .on("ended", (error, continueConversation) => {

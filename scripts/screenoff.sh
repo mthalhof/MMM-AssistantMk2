@@ -1,1 +1,2 @@
-vcgencmd display_power 0
+echo "standby 0" | cec-client RPI -s -d 1
+
